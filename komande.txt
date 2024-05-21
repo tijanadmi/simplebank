@@ -1,0 +1,11 @@
+migrate create -ext sql -dir db/migration -seq init_schema
+migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose up
+
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+sqlc version
+sqlc help
+sqlc init // generise yaml file u root-u projekta
+sqlc generate
+
+ go test -v -cover ./...
