@@ -9,3 +9,7 @@ sqlc init // generise yaml file u root-u projekta
 sqlc generate
 
  go test -v -cover ./...
+
+ go test -timeout 30s -run ^TestTransferTx$ -v
+
+ mkdir -p .github/workflows
