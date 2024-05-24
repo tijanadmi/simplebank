@@ -13,3 +13,31 @@ sqlc generate
  go test -timeout 30s -run ^TestTransferTx$ -v
 
  mkdir -p .github/workflows
+
+ go get github.com/spf13/viper
+
+ go install github.com/golang/mock/mockgen@v1.6.0
+
+ mockgen -package mockdb -destination db/mock/store.go github.com/tijanadmi/simplebank/db/sqlc Store
+
+ /***** pokrecemo izmene na bazi sa novom migracijom ***/
+ migrate create -ext sql -dir db/migration -seq add_users
+ make migrateup  // dobijamo gresku zbog toga sto imamo podatke u tabeli account a dizemo constraint i forein key
+make migratedown // dobijamo gresku zbog diry version jer nam prethodna migracija nije prosla, zato rucno u bazi u tabeli schema_migration promenimo kolonu dirty na false
+ make migratedown // sada prolazi brisanje svih podataka iz baze
+  make migrateup // prolazi
+
+  make migratedown1 // brisemo promene u bazi koje su kreirane sa migrate verzije 1
+  make migrateup1
+
+make sqlc
+
+make test // ne prolaze mock testovi zato sto smo dobili jos 2 nova metoda Querie interface-account
+//make mock // da regenerisemo kod za mock Store
+mockgen -package mockdb -destination db/mock/store.go github.com/tijanadmi/simplebank/db/sqlc Store
+make test // sada prolazi
+
+
+go get github.com/google/uuid
+
+go get -u github.com/o1egl/paseto
