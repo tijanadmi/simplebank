@@ -41,3 +41,29 @@ make test // sada prolazi
 go get github.com/google/uuid
 
 go get -u github.com/o1egl/paseto
+
+/**** Rad sa sesijom ***/
+migrate create -ext sql -dir db/migration -seq add_sessions
+make migrateup
+make sqlc
+
+/*** DB dokumentacija ***/
+node -v
+npm -v
+npm install -g dbdocs
+/*** posto je node zastareo morala sam da instaliram ponovo novu verziju ***/
+choco install nodejs-lts -y
+
+dbdocs /*** vraca spisak komandi ako je dobro instaliran ***/
+dbdocs login /*** unesemo 1 i email i nakon dobijanja mejla OTP kod***/
+dbdocs build doc/db.dbml /*** kreira se dokumentacija **/
+dbdocs password --set secret --project simple_bank /*** postavi se password=secret ***/
+
+/*** instalacija dbml ***/
+https://dbml.dbdiagram.io/cli
+npm install -g @dbml/cli //instalira se dbml
+dbml2sql --help
+dbml2sql --postgres -o doc/schema.sql doc/db.dbml //generise se db.dbml na putanji koju smo specificirali
+/*** ubacili smo komande u Makefile tako da kad god je potrebno regenerisati dbschema kucamo komadu: ***/
+make db_docs
+make db_schema
