@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/stretchr/testify/require"
 	"github.com/tijanadmi/simplebank/util"
 )
@@ -52,7 +53,7 @@ func TestGetUser(t *testing.T) {
 	require.WithinDuration(t, user1.CreatedAt, user2.CreatedAt, time.Second)
 }
 
-/*func TestUpdateUserOnlyFullName(t *testing.T) {
+func TestUpdateUserOnlyFullName(t *testing.T) {
 	oldUser := createRandomUser(t)
 
 	newFullName := util.RandomOwner()
@@ -89,6 +90,8 @@ func TestUpdateUserOnlyEmail(t *testing.T) {
 	require.Equal(t, oldUser.FullName, updatedUser.FullName)
 	require.Equal(t, oldUser.HashedPassword, updatedUser.HashedPassword)
 }
+
+
 
 func TestUpdateUserOnlyPassword(t *testing.T) {
 	oldUser := createRandomUser(t)
@@ -144,4 +147,4 @@ func TestUpdateUserAllFields(t *testing.T) {
 	require.Equal(t, newEmail, updatedUser.Email)
 	require.NotEqual(t, oldUser.FullName, updatedUser.FullName)
 	require.Equal(t, newFullName, updatedUser.FullName)
-}*/
+}
